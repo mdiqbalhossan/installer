@@ -1,0 +1,60 @@
+{
+    "name": "softmax/installer",
+    "description": "Softmax installer package for Laravel apps with complete installation wizard",
+    "keywords": [
+        "laravel",
+        "installer",
+        "softmax",
+        "installation-wizard",
+        "license-validation"
+    ],
+    "homepage": "https://github.com/softmax/installer",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Softmax",
+            "email": "support@soft-max.app"
+        }
+    ],
+    "type": "library",
+    "require": {
+        "php": ">=8.1",
+        "illuminate/support": "^10.0|^11.0",
+        "illuminate/http": "^10.0|^11.0",
+        "illuminate/routing": "^10.0|^11.0",
+        "illuminate/database": "^10.0|^11.0",
+        "illuminate/validation": "^10.0|^11.0",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "orchestra/testbench": "^8.0|^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Softmax\\Installer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Softmax\\Installer\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Softmax\\Installer\\InstallerServiceProvider"
+            ],
+            "aliases": {
+                "Installer": "Softmax\\Installer\\Facades\\Installer"
+            }
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
