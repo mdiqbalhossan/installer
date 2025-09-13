@@ -29,19 +29,52 @@ A comprehensive Laravel installation wizard package that provides a complete set
 
 ## Installation
 
-Install the package via Composer:
+Install the package via Composer. For the latest stable release, use:
 
 ```bash
-composer require softmax/installer
+composer require softmax/installer:^1.0
 ```
 
+If you want to install the latest development version, use:
+
+```bash
+composer require softmax/installer:dev-main
+```
+
+**Note:** If you encounter an error about minimum-stability when using `composer require softmax/installer`, use one of the explicit version constraints above.
+
 For Laravel 10+, the package will automatically register its service provider and middleware.
+
+## Troubleshooting Installation
+
+If you encounter the error:
+```
+Could not find a version of package softmax/installer matching your minimum-stability (stable)
+```
+
+This occurs when trying to install without an explicit version constraint. Use one of these solutions:
+
+**Solution 1: Use explicit version constraint (Recommended)**
+```bash
+composer require softmax/installer:^1.0
+```
+
+**Solution 2: Install development version**
+```bash
+composer require softmax/installer:dev-main
+```
+
+**Solution 3: Temporarily lower minimum stability**
+```bash
+composer config minimum-stability dev
+composer require softmax/installer --prefer-source
+```
 
 ## Quick Start
 
 1. **Install the package:**
 ```bash
-composer require softmax/installer
+composer require softmax/installer:^1.0
 ```
 
 2. **Publish the configuration:**
