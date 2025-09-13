@@ -195,6 +195,7 @@ class InstallerController extends Controller
             $envData = [
                 'APP_NAME' => $request->software_name,
                 'APP_URL' => $request->software_url,
+                'ASSETS_URL' => rtrim($request->software_url, '/').'/public/',
                 'DB_CONNECTION' => 'mysql',
                 'DB_HOST' => $request->db_host,
                 'DB_PORT' => $request->db_port ?: 3306,
