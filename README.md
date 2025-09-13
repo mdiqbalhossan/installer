@@ -35,6 +35,12 @@ Install the package via Composer:
 composer require softmax/installer
 ```
 
+If you encounter a minimum stability error, you can install a specific stable version:
+
+```bash
+composer require softmax/installer:^1.0
+```
+
 For Laravel 10+, the package will automatically register its service provider and middleware.
 
 ## Quick Start
@@ -42,6 +48,11 @@ For Laravel 10+, the package will automatically register its service provider an
 1. **Install the package:**
 ```bash
 composer require softmax/installer
+```
+
+If you encounter a minimum stability error, use:
+```bash
+composer require softmax/installer:^1.0
 ```
 
 2. **Publish the configuration:**
