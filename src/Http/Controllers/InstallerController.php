@@ -195,6 +195,7 @@ class InstallerController extends Controller
             $envData = [
                 'APP_NAME' => $request->software_name,
                 'APP_URL' => $request->software_url,
+                'DB_CONNECTION' => 'mysql',
                 'DB_HOST' => $request->db_host,
                 'DB_PORT' => $request->db_port ?: 3306,
                 'DB_DATABASE' => $request->db_name,
@@ -205,6 +206,7 @@ class InstallerController extends Controller
             Installer::updateEnvironment($envData);
 
             // Update database configuration for current request
+            Config::set('database.default', 'mysql');
             Config::set('database.connections.mysql.host', $request->db_host);
             Config::set('database.connections.mysql.port', $request->db_port ?: 3306);
             Config::set('database.connections.mysql.database', $request->db_name);
