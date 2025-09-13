@@ -28,7 +28,10 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^10.0",
-        "orchestra/testbench": "^8.0|^9.0"
+        "orchestra/testbench": "^8.0|^9.0",
+        "laravel/pint": "^1.0",
+        "phpstan/phpstan": "^1.10",
+        "phpstan/phpstan-phpunit": "^1.3"
     },
     "autoload": {
         "psr-4": {
@@ -54,6 +57,18 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "optimize-autoloader": true
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test-coverage": "phpunit --coverage-html build/coverage",
+        "format": "pint",
+        "format-check": "pint --test",
+        "analyse": "phpstan analyse",
+        "quality": [
+            "@format-check",
+            "@analyse",
+            "@test"
+        ]
     },
     "minimum-stability": "stable",
     "prefer-stable": true

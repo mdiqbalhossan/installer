@@ -26,7 +26,7 @@ class InstallerService
      */
     public function isInstalled(): bool
     {
-        $lockFile = storage_path(config('softmax.installer.installation.lock_file'));
+        $lockFile = storage_path(config('softmax-installer.installation.lock_file'));
         return file_exists($lockFile);
     }
 
@@ -39,7 +39,7 @@ class InstallerService
             return false;
         }
 
-        $keyFile = storage_path(config('softmax.installer.installation.encryption_key_file'));
+        $keyFile = storage_path(config('softmax-installer.installation.encryption_key_file'));
 
         if (! file_exists($keyFile)) {
             return false;
@@ -60,7 +60,7 @@ class InstallerService
      */
     public function checkRequirements(): array
     {
-        $extensions = config('softmax.installer.requirements.php_extensions', []);
+        $extensions = config('softmax-installer.requirements.php_extensions', []);
         $results    = [];
 
         foreach ($extensions as $extension) {
@@ -80,7 +80,7 @@ class InstallerService
      */
     public function checkPermissions(): array
     {
-        $directories = config('softmax.installer.requirements.directories', []);
+        $directories = config('softmax-installer.requirements.directories', []);
         $results     = [];
 
         foreach ($directories as $directory) {
@@ -105,13 +105,13 @@ class InstallerService
         try {
             $cleanDomain = $this->cleanDomain($domain);
 
-            $response = Http::timeout(config('softmax.installer.api_timeout'))
-                ->post(config('softmax.installer.api_base') . '/api/validate-license', [
-                    'customer_id'  => $customerId,
-                    'license_key'  => $licenseKey,
-                    'domain'       => $cleanDomain,
-                    'product_code' => config('softmax.installer.product_code'),
-                    'version'      => '1.0.0',
+            $response = Http::timeout(config('softmax-installer.api_timeout'))
+                ->post(config('softmax-installer.api_base') . '/api/validate-license', [
+                    'customer_id' => $customerId,
+                    'license_key' => $licenseKey,
+                    'domain' => $cleanDomain,
+                    'product_code' => config('softmax-installer.product_code'),  
+                    'version' => '1.0.0',
                 ]);
 
             $data = $response->json();
@@ -172,7 +172,7 @@ class InstallerService
                 $config['password'],
                 [
                     \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-                    \PDO::ATTR_TIMEOUT => config('softmax.installer.database.timeout', 10),
+                    \PDO::ATTR_TIMEOUT => config('softmax-installer.database.timeout', 10),
                 ]
             );
 
@@ -270,7 +270,7 @@ class InstallerService
 
             // Assign admin role if Spatie permission package is available
             if (method_exists($user, 'assignRole')) {
-                $user->assignRole(config('softmax.installer.admin.default_role', 'admin'));
+                $user->assignRole(config('softmax-installer.admin.default_role', 'admin'));
             }
 
             return [
@@ -292,8 +292,8 @@ class InstallerService
     public function registerInstallation(array $data): array
     {
         try {
-            $response = Http::timeout(config('softmax.installer.api_timeout'))
-                ->post(config('softmax.installer.api_base') . '/api/register-installation', [
+            $response = Http::timeout(config('softmax-installer.api_timeout'))
+                ->post(config('softmax-installer.api_base') . '/api/register-installation', [
                     'customer_id'       => $data['customer_id'],
                     'license_key'       => $data['license_key'],
                     'domain'            => $this->cleanDomain($data['domain']),
@@ -339,7 +339,7 @@ class InstallerService
         }
 
         // Create lock file
-        $lockFile = storage_path(config('softmax.installer.installation.lock_file'));
+        $lockFile = storage_path(config('softmax-installer.installation.lock_file'));
         file_put_contents($lockFile, json_encode([
             'installed_at'      => now()->toISOString(),
             'version'           => '1.0.0',
@@ -348,11 +348,11 @@ class InstallerService
         ]), LOCK_EX);
 
         // Store encryption key
-        $keyFile = storage_path(config('softmax.installer.installation.encryption_key_file'));
+        $keyFile = storage_path(config('softmax-installer.installation.encryption_key_file'));
         file_put_contents($keyFile, config('app.key'), LOCK_EX);
 
         // Store license information (encrypted)
-        $licenseFile = storage_path(config('softmax.installer.installation.license_file'));
+        $licenseFile = storage_path(config('softmax-installer.installation.license_file'));
         file_put_contents($licenseFile, json_encode($licenseData), LOCK_EX);
     }
 
@@ -374,9 +374,9 @@ class InstallerService
     public function cleanupInstallation(): void
     {
         $files = [
-            storage_path(config('softmax.installer.installation.lock_file')),
-            storage_path(config('softmax.installer.installation.encryption_key_file')),
-            storage_path(config('softmax.installer.installation.license_file')),
+            storage_path(config('softmax-installer.installation.lock_file')),
+            storage_path(config('softmax-installer.installation.encryption_key_file')),
+            storage_path(config('softmax-installer.installation.license_file')),
         ];
 
         foreach ($files as $file) {

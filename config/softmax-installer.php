@@ -11,7 +11,7 @@ return [
     */
     'api_base' => 'https://soft-max.app',
     'api_timeout' => env('SOFTMAX_API_TIMEOUT', 30),
-    'product_code' => '684265',
+    'product_code' => '123456',
 
     /*
     |--------------------------------------------------------------------------

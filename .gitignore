@@ -1,0 +1,57 @@
+# Dependencies
+/vendor/
+composer.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+/build/
+/coverage/
+.phpunit.result.cache
+
+# Environment
+.env
+.env.backup
+.env.production
+
+# Logs
+*.log
+
+# Temporary files
+/tmp/
+*.tmp
+*.temp
+
+# PHPUnit
+phpunit.xml.bak
+
+# PHPStan
+phpstan.neon.dist
+
+# Laravel Mix / Vite
+/public/hot
+/public/storage
+/storage/*.key
+/storage/app/public
+/storage/framework/cache/data
+/storage/framework/sessions
+/storage/framework/testing
+/storage/framework/views
+/storage/logs
+
+# Node modules (if using frontend build tools)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Package development
+*.tar.gz
+*.zip
