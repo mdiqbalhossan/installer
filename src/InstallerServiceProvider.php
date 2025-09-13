@@ -5,6 +5,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
 use Softmax\Installer\Services\InstallerService;
 use Softmax\Installer\Http\Middleware\RedirectIfNotInstalled;
+use Softmax\Installer\Console\Commands\InstallationStatusCommand;
+use Softmax\Installer\Console\Commands\ResetInstallationCommand;
 
 class InstallerServiceProvider extends ServiceProvider
 {
@@ -14,7 +16,7 @@ class InstallerServiceProvider extends ServiceProvider
     public function register()
     {
         // Merge package config
-        $this->mergeConfigFrom(__DIR__.'/../config/softmax-installer.php', 'softmax.installer');
+        $this->mergeConfigFrom(__DIR__.'/../config/softmax-installer.php', 'softmax-installer');
 
         // Bind singleton service
         $this->app->singleton('softmax.installer', function($app) {
@@ -56,6 +58,14 @@ class InstallerServiceProvider extends ServiceProvider
         // Load additional configuration in production
         if ($this->app->environment('production')) {
             $this->loadProductionConfiguration();
+        }
+
+        // Register console commands
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                InstallationStatusCommand::class,
+                ResetInstallationCommand::class,
+            ]);
         }
     }
 
