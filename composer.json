@@ -1,5 +1,6 @@
 {
     "name": "softmax/installer",
+    "version": "1.0.0",
     "description": "Softmax installer package for Laravel apps with complete installation wizard",
     "keywords": [
         "laravel",
