@@ -9,9 +9,9 @@ return [
     | Configuration for communicating with the core licensing system
     |
     */
-    'api_base' => 'http://localhost/license_manage',
+    'api_base' => 'https://soft-max.app',
     'api_timeout' => env('SOFTMAX_API_TIMEOUT', 30),
-    'product_code' => '12345',
+    'product_code' => '684265',
 
     /*
     |--------------------------------------------------------------------------

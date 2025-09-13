@@ -107,28 +107,32 @@ class InstallerService
 
             $response = Http::timeout(config('softmax.installer.api_timeout'))
                 ->post(config('softmax.installer.api_base') . '/api/validate-license', [
-                    'customer_id' => $customerId,
-                    'license_key' => $licenseKey,
-                    'domain' => $cleanDomain,
-                    'product_code' => config('softmax.installer.product_code'),  
-                    'version' => '1.0.0',
+                    'customer_id'  => $customerId,
+                    'license_key'  => $licenseKey,
+                    'domain'       => $cleanDomain,
+                    'product_code' => config('softmax.installer.product_code'),
+                    'version'      => '1.0.0',
                 ]);
-
-            if (!$response->successful()) {
-                return [
-                    'success' => false,
-                    'message' => 'Unable to connect to license server. Please try again later.'
-                ];
-            }
 
             $data = $response->json();
 
-            if (!($data['valid'] ?? false)) {
+            // Check if the license server returned an error in JSON
+            if (($data['status'] ?? '') === 'error') {
                 return [
                     'success' => false,
-                    'message' => $data['message'] ?? 'Invalid license credentials.'
+                    'message' => $data['message'] ?? 'Invalid license credentials.',
+                    'errors'  => $data['data']['errors'] ?? null,
                 ];
             }
+
+            // Check if license is valid
+            if (!($data['data']['is_valid'] ?? false)) {
+                return [
+                    'success' => false,
+                    'message' => $data['data']['errors'][0] ?? 'Invalid license credentials.',
+                ];
+            }
+
             return [
                 'success' => true,
                 'data'    => $data,
@@ -301,7 +305,7 @@ class InstallerService
                     'version'           => '1.0.0',
                     'server_info'       => $this->getServerInfo(),
                 ]);
-
+                Log::info('Installation registration response', ['response' => $response->json()]);
             if (! $response->successful()) {
                 return [
                     'success' => false,
