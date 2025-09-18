@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **SonarQube Integration**: Complete code quality analysis with SonarQube
+- **Quality Gates**: Comprehensive quality gates for coverage, maintainability, reliability, and security
+- **Enhanced CI/CD**: SonarQube workflow for automated code analysis
+- **Coverage Reporting**: Multi-format coverage reports (Clover, HTML, Cobertura)
+- **Code Quality Metrics**: Technical debt, duplication, and complexity tracking
+- **Security Analysis**: Vulnerability and security hotspot detection
+- **Documentation**: Complete SonarQube integration guide and best practices
 - Comprehensive test suite with PHPUnit
 - Code quality tools (Laravel Pint, PHPStan)
 - GitHub Actions CI/CD workflow
@@ -17,6 +24,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Composer scripts for testing and quality checks
 
 ### Changed
+- **PHPUnit Configuration**: Enhanced for SonarQube compatibility with multiple coverage formats
+- **Composer Scripts**: Added SonarQube analysis and coverage scripts
+- **CI/CD Pipeline**: Extended with coverage collection and SonarQube integration
+- **Build Artifacts**: Organized build outputs for better analysis
 - Updated config key from 'softmax.installer' to 'softmax-installer' for Laravel standards
 - Improved exception classes with better error context
 - Enhanced validation with Form Request classes
@@ -24,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Laravel package standards compliance
 - Config naming convention alignment
+- Coverage report path compatibility with SonarQube
 
 ## [1.0.0] - 2025-09-13
 

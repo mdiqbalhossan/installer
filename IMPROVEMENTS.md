@@ -13,11 +13,15 @@ This package has been significantly enhanced to follow Laravel best practices an
 ### 🔧 Code Quality Tools
 - **Laravel Pint**: Automatic code formatting with Laravel preset
 - **PHPStan**: Static analysis with level 5 checking
+- **SonarQube**: Comprehensive code quality analysis with quality gates
+- **Coverage Reporting**: Multi-format coverage reports for analysis tools
 - **Composer Scripts**: Easy commands for testing and quality checks
 
 ### 🚀 CI/CD Pipeline
 - **GitHub Actions**: Multi-matrix testing across PHP 8.1-8.3 and Laravel 10.x-11.x
 - **Automated Quality Checks**: Code style and static analysis in CI
+- **SonarQube Integration**: Automated code quality analysis with quality gates
+- **Coverage Collection**: Comprehensive coverage reporting and upload
 - **Dependency Testing**: Tests with both lowest and stable dependencies
 
 ### 📝 Enhanced Validation
@@ -116,23 +120,29 @@ Cache::remember('installer.requirements', 3600, function() {
 
 ✅ **PSR-12 Compliance**: Code follows PHP-FIG standards
 ✅ **Laravel Conventions**: Proper naming, structure, and patterns
-✅ **Test Coverage**: Comprehensive test suite
+✅ **Test Coverage**: Comprehensive test suite with coverage reporting
 ✅ **Static Analysis**: PHPStan level 5 passing
-✅ **CI/CD**: Automated testing pipeline
-✅ **Documentation**: Complete documentation set
+✅ **SonarQube Integration**: Comprehensive code quality analysis
+✅ **Quality Gates**: Enforced quality standards for all code changes
+✅ **CI/CD**: Automated testing and analysis pipeline
+✅ **Security Analysis**: Vulnerability and security hotspot detection
+✅ **Documentation**: Complete documentation set with SonarQube guide
 ✅ **Dependency Management**: Proper composer configuration
 ✅ **Code Quality**: Automated formatting and linting
 
 ## Files Added
-- `phpunit.xml` - PHPUnit configuration
+- `sonar-project.properties` - SonarQube project configuration
+- `SONARQUBE.md` - Complete SonarQube integration guide
+- `.github/workflows/sonarqube.yml` - SonarQube analysis workflow
+- `phpunit.xml` - PHPUnit configuration (enhanced for SonarQube)
 - `pint.json` - Laravel Pint configuration  
 - `phpstan.neon` - PHPStan configuration
-- `.github/workflows/tests.yml` - CI/CD pipeline
+- `.github/workflows/tests.yml` - CI/CD pipeline (enhanced with coverage)
 - `tests/` - Complete test suite
 - `src/Http/Requests/` - Form Request classes
 - `src/Console/Commands/` - Artisan commands
-- `CHANGELOG.md` & `CONTRIBUTING.md` - Documentation
-- `.gitignore` - Proper exclusions
+- `CHANGELOG.md` & `CONTRIBUTING.md` - Documentation (enhanced)
+- `.gitignore` - Proper exclusions (including SonarQube artifacts)
 
 ## Usage Examples
 
@@ -150,8 +160,20 @@ composer analyse
 # Run tests
 composer test
 
+# Run tests with coverage
+composer test-coverage
+
 # Run all quality checks
 composer quality
+
+# Run quality checks with coverage (for SonarQube)
+composer quality-full
+
+# Prepare SonarQube analysis
+composer sonar-prepare
+
+# Run SonarQube analysis locally
+composer sonar-analysis
 ```
 
 ### Using New Commands

@@ -14,6 +14,48 @@ Thank you for considering contributing to the SoftMax Installer package! This do
    composer install
    ```
 
+## Code Quality Standards
+
+We maintain high code quality standards using automated tools and SonarQube analysis.
+
+### Quality Gates
+
+All code must pass the following quality gates:
+
+#### Coverage
+- **New Code Coverage**: Minimum 80%
+- **Overall Coverage**: Maintain or improve existing coverage
+- **Coverage on New Lines**: 100% on new code
+
+#### Maintainability  
+- **Technical Debt Ratio**: Maximum 5%
+- **Maintainability Rating**: A rating required
+- **Code Smells**: Zero new code smells
+
+#### Reliability
+- **Reliability Rating**: A rating required  
+- **Bugs**: Zero new bugs
+- **Bug-free New Code**: 100%
+
+#### Security
+- **Security Rating**: A rating required
+- **Vulnerabilities**: Zero new vulnerabilities
+- **Security Hotspots**: All reviewed
+- **Security Review Rating**: A rating required
+
+#### Duplication
+- **Duplicated Lines**: Maximum 3%
+- **Duplicated Blocks**: Minimize duplication
+
+### Automated Checks
+
+The following tools run automatically in our CI/CD pipeline:
+
+- **Laravel Pint**: PSR-12 code formatting
+- **PHPStan**: Static analysis (Level 5)
+- **PHPUnit**: Unit and feature testing
+- **SonarQube**: Comprehensive code quality analysis
+
 ## Code Standards
 
 We follow Laravel coding standards and use the following tools:
@@ -32,6 +74,12 @@ We follow Laravel coding standards and use the following tools:
 
 ### Quality Check
 - Run all quality checks: `composer quality`
+- Run quality checks with coverage: `composer quality-full`
+
+### SonarQube Analysis
+- **Prepare for analysis**: `composer sonar-prepare`
+- **Run local analysis**: `composer sonar-analysis`
+- **View results**: Check SonarQube dashboard after CI/CD run
 
 ## Testing
 
@@ -65,10 +113,16 @@ vendor/bin/phpunit tests/Unit/InstallerServiceTest.php
 
 3. **Run quality checks**:
    ```bash
-   composer quality
+   composer quality-full
    ```
 
-4. **Write/update tests** for your changes
+4. **Ensure SonarQube compliance**:
+   - Maintain minimum 80% code coverage
+   - Zero new bugs, vulnerabilities, or security hotspots
+   - Keep technical debt ratio below 5%
+   - Follow clean code principles
+
+5. **Write/update tests** for your changes
 
 5. **Update documentation** if needed
 

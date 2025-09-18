@@ -17,6 +17,11 @@ Thumbs.db
 /coverage/
 .phpunit.result.cache
 
+# SonarQube
+.scannerwork/
+.sonar/
+sonar-report.json
+
 # Environment
 .env
 .env.backup
