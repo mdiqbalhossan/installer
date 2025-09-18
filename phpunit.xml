@@ -23,14 +23,21 @@
         <include>
             <directory suffix=".php">./src</directory>
         </include>
+        <exclude>
+            <directory suffix=".php">./src/Views</directory>
+            <file>./src/InstallerServiceProvider.php</file>
+        </exclude>
         <report>
-            <html outputDirectory="build/coverage"/>
-            <text outputFile="build/coverage.txt"/>
-            <clover outputFile="build/logs/clover.xml"/>
+            <html outputDirectory="build/coverage/html"/>
+            <text outputFile="build/coverage/coverage.txt"/>
+            <clover outputFile="build/coverage/clover.xml"/>
+            <cobertura outputFile="build/coverage/cobertura.xml"/>
         </report>
     </coverage>
     <logging>
-        <junit outputFile="build/report.junit.xml"/>
+        <junit outputFile="build/tests/phpunit.xml"/>
+        <testdoxHtml outputFile="build/tests/testdox.html"/>
+        <testdoxText outputFile="build/tests/testdox.txt"/>
     </logging>
     <php>
         <env name="APP_ENV" value="testing"/>

@@ -306,6 +306,73 @@ The package integrates seamlessly with Laravel:
 - **Routes**: Automatically loaded from [`routes/web.php`](packages/softmax/installer/routes/web.php)
 - **Views**: Responsive UI built with Tailwind CSS and Alpine.js
 
+## Code Quality & Analysis
+
+This package includes comprehensive code quality analysis using SonarQube for maintaining the highest standards of code quality.
+
+### SonarQube Integration
+
+#### Setup SonarQube Analysis
+
+1. **Create SonarQube Project**:
+   - Set up a project in your SonarQube instance
+   - Generate a project token
+   - Note your SonarQube server URL
+
+2. **Configure GitHub Secrets**:
+   ```
+   SONAR_TOKEN: your_sonarqube_project_token
+   SONAR_HOST_URL: https://your-sonarqube-instance.com
+   CODECOV_TOKEN: your_codecov_token (optional)
+   ```
+
+3. **Automated Analysis**:
+   - SonarQube analysis runs automatically on push/PR to main/develop branches
+   - Code coverage is collected and uploaded to SonarQube
+   - Quality gates are enforced to maintain code standards
+
+#### Quality Metrics Tracked
+
+- **Code Coverage**: Minimum 80% coverage required
+- **Maintainability**: Technical debt ratio < 5%
+- **Reliability**: Zero bugs on new code
+- **Security**: Zero vulnerabilities on new code
+- **Duplications**: Maximum 3% duplicated lines
+- **Code Smells**: Clean code principles enforcement
+
+#### Running Local Analysis
+
+```bash
+# Prepare for SonarQube analysis
+composer sonar-prepare
+
+# Run full analysis with coverage
+composer sonar-analysis
+
+# Run quality checks with coverage
+composer quality-full
+```
+
+#### Manual SonarQube Scan
+
+```bash
+# Install SonarQube Scanner (if not in CI)
+# Download from: https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/
+
+# Run analysis
+sonar-scanner \
+  -Dsonar.projectKey=your_project_key \
+  -Dsonar.sources=src \
+  -Dsonar.host.url=https://your-sonarqube-instance.com \
+  -Dsonar.login=your_token
+```
+
+#### Configuration Files
+
+- `sonar-project.properties`: Main SonarQube configuration
+- `.github/workflows/sonarqube.yml`: GitHub Actions workflow
+- `phpunit.xml`: Coverage and testing configuration
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.

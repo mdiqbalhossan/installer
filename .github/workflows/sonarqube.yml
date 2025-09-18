@@ -1,0 +1,145 @@
+name: SonarQube Analysis
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  sonarqube:
+    name: SonarQube Code Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for better analysis
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
+          coverage: xdebug
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --optimize-autoloader
+
+      - name: Create build directories
+        run: |
+          mkdir -p build/coverage
+          mkdir -p build/tests
+          mkdir -p build/logs
+
+      - name: Run code formatting check
+        run: vendor/bin/pint --test
+
+      - name: Run static analysis
+        run: vendor/bin/phpstan analyse --error-format=json > build/logs/phpstan.json || true
+
+      - name: Run tests with coverage
+        run: vendor/bin/phpunit --coverage-clover=build/coverage/clover.xml --coverage-html=build/coverage/html --log-junit=build/tests/phpunit.xml
+
+      - name: Fix code coverage paths for SonarQube
+        working-directory: ./build/coverage
+        run: |
+          if [ -f clover.xml ]; then
+            sed -i 's|/home/runner/work/installer/installer/||g' clover.xml
+          fi
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Setup Java for SonarQube
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: SonarQube Scan
+        uses: sonarqube-quality-gate-action@master
+        with:
+          scanMetadataReportFile: .scannerwork/report-task.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Run SonarQube Scanner
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: SonarQube Quality Gate Check
+        id: sonarqube-quality-gate-check
+        uses: sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: build/coverage/clover.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage-report
+          path: |
+            build/coverage/
+            build/tests/
+            build/logs/
+
+      - name: Comment PR with SonarQube results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = '.scannerwork/report-task.txt';
+            
+            if (fs.existsSync(path)) {
+              const content = fs.readFileSync(path, 'utf8');
+              const lines = content.split('\n');
+              let dashboardUrl = '';
+              
+              for (const line of lines) {
+                if (line.startsWith('dashboardUrl=')) {
+                  dashboardUrl = line.split('=')[1];
+                  break;
+                }
+              }
+              
+              if (dashboardUrl) {
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: `## 📊 SonarQube Analysis Results\n\n🔍 **[View detailed analysis report on SonarQube](${dashboardUrl})**\n\nThis analysis includes:\n- Code quality metrics\n- Security vulnerabilities\n- Code coverage\n- Maintainability issues\n- Duplicated code blocks\n\n> Quality Gate: ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}`
+                });
+              }
+            }
